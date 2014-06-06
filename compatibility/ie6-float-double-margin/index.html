@@ -1,0 +1,203 @@
+﻿<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+<meta charset="utf-8" />
+<title>ie6 float double margin</title>
+<meta name="description" content="CSS缺陷手册: IE6浮动双倍margin" />
+<meta name="keywords" content="IE6 bug,浮动,双倍边距,双倍margin" />
+<meta name="author" content="Joy Du(飘零雾雨), dooyoe@gmail.com, www.doyoe.com" />
+<meta name="robots" content="all" />
+<!--[if lte IE 8]>
+<script src="../../js/html5.js"></script>
+<![endif]-->
+<link rel="stylesheet" href="../../skin/article.css" />
+</head>
+<body>
+<nav id="guide" class="g-mod">
+	<div class="from">
+		<a href="http://bug.doyoe.com/" target="_blank">CSS缺陷手册</a>
+		<span>&#187;</span>
+		<a href="../index.html" id="category" rel="compatibility/ie6-float-double-margin" name="index">兼容性</a>
+		<span>&#187;</span>
+	</div>
+</nav>
+<header id="hd">
+	<section id="title" class="g-mod">
+		<h1 class="tit">IE6浮动双倍margin</h1>
+		<!-- 插入浏览器信息 -->
+	</section>
+</header>
+<section id="bd">
+	<article id="article">
+	    <h2>问题描述</h2>
+		<p>当元素浮动并且定义了与浮动及书写方向一致的margin，这时，在IE6下margin值将表现为指定值的双倍，如果同一个包含块内有多个子元素浮动，那么只有和浮动方向一致元素的margin才会双倍，并且该元素是浮动方向上的第一个元素。</p>
+
+		<h2>影响环境</h2>
+		<p>windows/IE6</p>
+
+		<h2>触发条件</h2>
+		<ul>
+			<li>block和list-item元素</li>
+			<li>定义了浮动</li>
+			<li>margin定义与浮动及书写方向一致</li>
+		</ul>
+
+		<h2>问题重现</h2>
+		<h3>最小化代码重现问题：</h3>
+		<div class="code">
+			<h3>CSS Code：</h3>
+			<code>
+				<xmp>.demo{*zoom:1;overflow:hidden;background:#f00;}
+.demo .item{float:left;margin-left:15px;padding:5px 10px;background:#aaa;}</xmp>
+			</code>
+		</div>
+		<div class="code">
+			<h3>HTML Code：</h3>
+			<code>
+				<xmp><div class="demo">
+	<div class="item item1">子项一</div>
+	<div class="item item2">子项二</div>
+	<div class="item item3">子项三</div>
+</div></xmp>
+			</code>
+		</div>
+		<h3>预期效果：</h3>
+		<p><img src="sample/image/1.png" /></p>
+		<p>（图一）</p>
+		<h3>IE6效果如下：</h3>
+		<p><img src="sample/image/2.png" /></p>
+		<p>（图二）</p>
+		<p>可以很明显的看到第1个子元素的左边距（CSS代码中定义的margin-left）比后2个都要宽，要告诉你的是，它正好是正常设定的2倍大小。</p>
+		<h3>DEMO：</h3>
+		<p>查看 <a href="sample/1.html">DEMO1</a> 并在IE6和其它浏览器下对比。</p>
+
+		<h2>验证触发条件</h2>
+		<h3>list-item元素</h3>
+		<p>真的是只有block和list-item元素才会触发此Bug吗？block元素我们已在 <a href="sample/1.html">DEMO1</a> 中验证过，再来验证list-item元素，html修改如下：</p>
+		<div class="code">
+			<h3>HTML Code：</h3>
+			<code>
+				<xmp><ul class="demo">
+	<li class="item item1">子项一</li>
+	<li class="item item2">子项二</li>
+	<li class="item item3">子项三</li>
+</ul></xmp>
+			</code>
+		</div>
+
+		<p>当我们将元素list-item的li时，你会发现问题仍然存在，用事实说话：<a href="sample/2.html">DEMO2</a></p>
+
+		<h3>inline元素</h3>
+		<p>我们接着验证inline元素，html修改如下：</p>
+		<div class="code">
+			<h3>HTML Code：</h3>
+			<code>
+				<xmp><div class="demo">
+	<span class="item item1">子项一</span>
+	<span class="item item2">子项二</span>
+	<span class="item item3">子项三</span>
+</div></xmp>
+			</code>
+		</div>
+
+		<p>你会发现IE6居然也正常工作了，用事实说话：<a href="sample/3.html">DEMO3</a></p>
+
+		<h3>inline-block元素</h3>
+
+		<p>验证inline-block元素，我们只能使用行内元素来进行，因为IE6不支持块元素直接通过display去转换为行内元素。所以干脆直接在 <a href="sample/3.html">DEMO3</a> 的基础上，将CSS修改如下：</p>
+
+		<div class="code">
+			<h3>CSS Code：</h3>
+			<code>
+				<xmp>.demo .item{_display:inline-block;}</xmp>
+			</code>
+		</div>
+
+		<p>很明显，你也会得到一个在IE6下正常工作的代码，示例如下：<a href="sample/4.html">DEMO4</a></p>
+
+		<h3>验证描述</h3>
+
+		<p>我们验证了 block | list-item | inline | inline-block 4种元素的情况，至于其它的就不用再验证了，因为IE6都不支持。准备的说只有 <b>block和list-item元素</b> 才能触发其实是不严谨的，应该说是 <b>block level</b> 都会触发。</p>
+
+		<p>简单说明一下几个概念吧：</p>
+
+		<ul>
+			<li>block level elements 块级元素</li>
+			<li>inline level elements 行内级元素</li>
+			<li>block elements 块元素</li>
+			<li>inline elements 行内元素</li>
+			<li>块级元素包含block(块元素)，list-item，table等元素</li>
+			<li>行内级元素包含inline(行内元素)，inline-block，inline-table等元素</li>
+		</ul>
+
+		<p>这些概念很重要，不要混淆了，想更详细的了解这些信息，请自行Google至W3C。</p>
+
+		<h2>问题产生原因</h2>
+
+		<p>IE6排版引擎实现上的Bug，无原理和常规解释。</p>
+
+
+		<h2>解决方案</h2>
+
+		<p>虽然我们无法知道IE6的排版引擎在实现上为什么会有此Bug，但通过对触发条件的验证，我们知道了此问题只有block level元素才会触发，也就是说我们只需要修改display属性为非block level即可。同时，我们知道IE6只支持display属性的：none | inline | block | list-item | inline-block 5个值；而且对inline-block的支持只体现在行内元素上，行内元素不触发该Bug，于是没场景使用；你又不可能将元素隐藏，那么就只剩下inline可选。于是双倍边距Bug的最终解决方案只能是：</p>
+
+		<div class="code">
+			<h3>CSS Code：</h3>
+			<code>
+				<xmp>display:inline</xmp>
+			</code>
+		</div>
+
+		<p>修正后的 <a href="sample/5.html">DEMO5</a></p>
+
+		<h2>其它</h2>
+
+		<p>至于触发条件里的 <strong>margin定义与浮动及书写方向一致</strong> 是什么意思呢？这里只简单说一下，直接看代码比较容易：</p>
+
+		<div class="code">
+			<h3>CSS Code：</h3>
+			<code>
+				<xmp>.demo{*zoom:1;overflow:hidden;background:#f00;}
+.demo .item{margin:0 15px;padding:5px 10px;background:#aaa;}
+.demo .item1,.demo .item2{float:left;}
+.demo .item3,.demo .item4{float:right;}</xmp>
+			</code>
+		</div>
+
+		<div class="code">
+			<h3>HTML Code：</h3>
+			<code>
+				<xmp><div class="demo">
+	<div class="item item1">子项一</div>
+	<div class="item item2">子项二</div>
+	<div class="item item3">子项三</div>
+	<div class="item item4">子项四</div>
+</div></xmp>
+			</code>
+		</div>
+
+		<p>你会发现<code>item1</code>和<code>item3</code> 都双倍margin了，但方向却不同，<code>item1</code>是margin-left双倍，而<code>item3</code>是margin-right双倍。示例如下：<a href="sample/6.html">DEMO6</a></p>
+
+		<p>这说明了什么呢？</p>
+
+		<p>首先说明双倍margin的方向和浮动方向有关，因为<code>item1</code>是左浮动，所以左边距才双倍，<code>item3</code>是右浮动，所以右边距才双倍；<br>
+		其次，<code>item1</code>和<code>item3</code>分别是包含块<code>demo</code>中左浮动和右浮动中的第1个离包含块边界最近的子元素，它们的margin双倍了，但<code>item2</code>和<code>item4</code>却没有双倍，这表示说包含块中只有和浮动方向一致的第1个子元素才会触发双倍边距。</p>
+
+		<p>这就是IE6浮动双倍边距的全部吗？</p>
+
+		<p>答案当然不是，因为<code>margin-top</code>和<code>margin-bottom</code>也会双倍，你能想到是在什么场景下吗？think and try.</p>
+
+		<h2>结语</h2>
+
+		<p>知其然，知其所以然，是一件很Cool的事。</p>
+	</article>
+</section>
+<footer id="ft">
+	<aside id="rights" class="g-mod">
+		<!-- 插入浏览器及版权信息 -->
+	</aside>
+</footer>
+<script src="../../js/jquery.js"></script>
+<script src="../../js/inner.js"></script>
+</body>
+</html>
