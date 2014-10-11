@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>space in button</title>
+<meta name="description" content="" />
+<meta name="keywords" content="" />
+<meta name="author" content="" />
+<link rel="stylesheet" href="reset.css" />
+<style>
+/* 按钮基本构造 */
+.g-btn,.g-btn span{display:inline-block;overflow:hidden;background:url(bgimg/btn.png) no-repeat;color:#fff;vertical-align:top;}
+.g-btn{padding-right:9px;background-position:right 0;text-decoration:none;cursor:pointer;}
+.g-btn span{height:100%;padding-left:9px;}
+.g-btn span span{padding:0 5px;background-repeat:repeat-x;}
+/* 提交按钮 */
+.g-btn-submit{height:22px;font-size:12px;line-height:22px;}
+.g-btn-submit span span{background-position:0 -23px;}
+/* 确定按钮 */
+.g-btn-sure{height:30px;background-position:right -46px;font-size:14px;line-height:30px;}
+.g-btn-sure span{background-position:0 -46px;}
+.g-btn-sure span span{background-position:0 -77px;}
+</style>
+</head>
+<body>
+<a href="?" class="g-btn g-btn-submit"><span><span>提交按钮</span></span></a>
+<a href="?" class="g-btn g-btn-sure"><span><span>确定按钮</span></span></a>
+</body>
+</html>
